@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
+// import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -53,6 +54,7 @@ export function SignUpForm({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  // const router = useRouter();
 
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -64,7 +66,8 @@ export function SignUpForm({
         values.password,
       );
       if (response.success) {
-        toast.success(response.message);
+        toast.success("Check your email for verification");
+        // router.push("/dashboard");
       } else {
         toast.error(response.message);
       }
