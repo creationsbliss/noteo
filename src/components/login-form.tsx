@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2Icon } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,7 +32,7 @@ const formSchema = z.object({
   email: z.email(),
   password: z
     .string()
-    .min(8, { message: "Password must be more than 8 characters" }),
+    .min(8, { message: "Password must be equal to or more than 8 characters" }),
 });
 
 export function LoginForm({
@@ -47,6 +48,7 @@ export function LoginForm({
   });
 
   const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
 
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -55,6 +57,7 @@ export function LoginForm({
       const response = await signInUser(values.email, values.password);
       if (response.success) {
         toast.success(response.message);
+        router.push("/dashboard");
       } else {
         toast.error(response.message);
       }

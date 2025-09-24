@@ -93,12 +93,12 @@ export const HeroHeader = () => {
                 <ModeToggle />
 
                 <Button asChild variant="outline" size="sm">
-                  <Link href="#">
+                  <Link href="/login">
                     <span>Login</span>
                   </Link>
                 </Button>
                 <Button asChild size="sm">
-                  <Link href="#">
+                  <Link href="/signup">
                     <span>Sign Up</span>
                   </Link>
                 </Button>
