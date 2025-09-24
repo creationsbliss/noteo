@@ -25,6 +25,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
 import { signInUser } from "../../server/users";
 
@@ -49,6 +50,14 @@ export function LoginForm({
 
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+
+  // Login with Google
+  const signIn = async () => {
+    await authClient.signIn.social({
+      provider: "google",
+      callbackURL: "/dashboard",
+    });
+  };
 
   // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -129,7 +138,12 @@ export function LoginForm({
                       "Login"
                     )}
                   </Button>
-                  <Button variant="outline" className="w-full">
+                  <Button
+                    type="button"
+                    onClick={signIn}
+                    variant="outline"
+                    className="w-full"
+                  >
                     Login with Google
                   </Button>
                 </div>
