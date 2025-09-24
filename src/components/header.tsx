@@ -7,8 +7,6 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "./mode-toggle";
 
-const menuItems = [{ name: "Dashboard", href: "/dashboard" }];
-
 export const HeroHeader = () => {
   const [menuState, setMenuState] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
@@ -44,8 +42,9 @@ export const HeroHeader = () => {
               </Link>
 
               <button
+                type="button"
                 onClick={() => setMenuState(!menuState)}
-                aria-label={menuState == true ? "Close Menu" : "Open Menu"}
+                aria-label={menuState === true ? "Close Menu" : "Open Menu"}
                 className="relative z-20 -m-2.5 -mr-4 block cursor-pointer p-2.5 lg:hidden"
               >
                 <Menu className="in-data-[state=active]:rotate-180 in-data-[state=active]:scale-0 in-data-[state=active]:opacity-0 m-auto size-6 duration-200" />
@@ -59,7 +58,7 @@ export const HeroHeader = () => {
 
                 <Button asChild size="sm">
                   <Link href="/dashboard">
-                    <span>Dashboard</span>
+                    <span>+ Note</span>
                   </Link>
                 </Button>
 

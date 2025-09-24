@@ -1,4 +1,4 @@
-import { ArrowRight, ChevronRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnimatedGroup } from "@/components/ui/animated-group";
@@ -152,7 +152,7 @@ export default function HeroSection() {
                       className="rounded-xl px-5 text-base"
                     >
                       <Link href="/dashboard">
-                        <span className="text-nowrap">Start Building</span>
+                        <span className="text-nowrap">Create Note</span>
                       </Link>
                     </Button>
                   </div>
