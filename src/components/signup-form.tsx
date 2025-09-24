@@ -60,11 +60,18 @@ export function SignUpForm({
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
+
+      if (values.password !== values.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
       const response = await signUpUser(
         values.username,
         values.email,
         values.password,
       );
+
       if (response.success) {
         toast.success("Check your email for verification");
         // router.push("/dashboard");

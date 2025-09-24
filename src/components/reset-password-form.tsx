@@ -1,9 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2Icon } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -25,44 +25,54 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { authClient } from "@/lib/auth-client";
 import { cn } from "@/lib/utils";
-import { signInUser } from "../../server/users";
 
 const formSchema = z.object({
-  email: z.email(),
-  password: z
-    .string()
-    .min(8, { message: "Password must be equal to or more than 8 characters" }),
+  password: z.string().min(8),
+  confirmPassword: z.string().min(8),
 });
 
-export function LoginForm({
+export function ResetPasswordForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+
+  const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const router = useRouter();
-
-  // Submit handler
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
       setIsLoading(true);
-      const response = await signInUser(values.email, values.password);
-      if (response.success) {
-        toast.success(response.message);
-        router.push("/dashboard");
+
+      if (values.password !== values.confirmPassword) {
+        toast.error("Passwords do not match");
+        return;
+      }
+
+      const { error } = await authClient.resetPassword({
+        newPassword: values.password,
+        token: token ?? "",
+      });
+
+      if (!error) {
+        toast.success("Password reset successfully");
+        router.push("/login");
       } else {
-        toast.error(response.message);
+        toast.error(error.message);
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setIsLoading(false);
     }
@@ -72,43 +82,41 @@ export function LoginForm({
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card>
         <CardHeader>
-          <CardTitle>Login to your account</CardTitle>
+          <CardTitle>Reset your password</CardTitle>
           <CardDescription>
-            Enter your email below to login to your account
+            Enter your new password below to reset your password
           </CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
               <div className="flex flex-col gap-6">
-                <FormField
-                  control={form.control}
-                  name="email"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Email</FormLabel>
-                      <FormControl>
-                        <Input placeholder="someone@example.com" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <div>
+                <div className="grid gap-3">
                   <FormField
                     control={form.control}
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <div className="flex items-center">
-                          <FormLabel>Password</FormLabel>
-                          <Link
-                            href="/forgot-password"
-                            className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
-                          >
-                            Forgot your password?
-                          </Link>
-                        </div>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            placeholder="********"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-3">
+                  <FormField
+                    control={form.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Confirm Password</FormLabel>
                         <FormControl>
                           <Input
                             type="password"
@@ -124,22 +132,16 @@ export function LoginForm({
                 <div className="flex flex-col gap-3">
                   <Button type="submit" className="w-full" disabled={isLoading}>
                     {isLoading ? (
-                      <Loader2Icon className="size-4 animate-spin" />
+                      <Loader2 className="size-4 animate-spin" />
                     ) : (
-                      "Login"
+                      "Reset Password"
                     )}
-                  </Button>
-                  <Button variant="outline" className="w-full">
-                    Login with Google
                   </Button>
                 </div>
               </div>
               <div className="mt-4 text-center text-sm">
-                Don&apos;t have an account?
-                <Link
-                  href="/signup"
-                  className="ml-1 underline underline-offset-4"
-                >
+                Don&apos;t have an account?{" "}
+                <Link href="/signup" className="underline underline-offset-4">
                   Sign up
                 </Link>
               </div>
