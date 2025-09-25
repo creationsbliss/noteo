@@ -162,7 +162,7 @@ const RichTextEditor = ({ content, noteId }: RichTextEditorProps) => {
   };
 
   return (
-    <div className="w-full max-w-7xl bg-card text-card-foreground rounded-lg overflow-hidden border">
+    <div className="w-full max-w-7xl bg-background text-card-foreground rounded-lg overflow-hidden border">
       {/* Toolbar */}
       <div className="flex items-center gap-1 p-2 bg-muted/50 border-b">
         {/* Undo/Redo */}
@@ -394,7 +394,7 @@ const RichTextEditor = ({ content, noteId }: RichTextEditorProps) => {
       </div>
 
       {/* Editor Content */}
-      <div className="min-h-96 p-6 bg-card">
+      <div className="min-h-96 p-6 bg-background">
         <EditorContent
           editor={editor}
           className="prose prose-neutral dark:prose-invert max-w-none focus:outline-none [&_.ProseMirror]:focus:outline-none [&_.ProseMirror]:min-h-96 [&_.ProseMirror_h1]:text-3xl [&_.ProseMirror_h1]:font-bold [&_.ProseMirror_h1]:mb-4 [&_.ProseMirror_h2]:text-2xl [&_.ProseMirror_h2]:font-bold [&_.ProseMirror_h2]:mb-3 [&_.ProseMirror_p]:mb-4 [&_.ProseMirror_blockquote]:border-l-4 [&_.ProseMirror_blockquote]:border-border [&_.ProseMirror_blockquote]:pl-4 [&_.ProseMirror_blockquote]:italic [&_.ProseMirror_pre]:bg-muted [&_.ProseMirror_pre]:p-4 [&_.ProseMirror_pre]:rounded [&_.ProseMirror_pre]:overflow-x-auto [&_.ProseMirror_code]:bg-muted [&_.ProseMirror_code]:px-1 [&_.ProseMirror_code]:rounded"
