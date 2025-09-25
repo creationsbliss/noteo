@@ -1,6 +1,6 @@
 # Project Detail
 
-A modern note-taking application where users can sign up, log in, and manage their notebooks. Each notebook can hold multiple notes, making it easy to stay organized. The project is built with Next.js, styled with shadcn/ui and Tailwind CSS, and powered by NeonDB, Drizzle ORM, and Better Auth for authentication. <br/>  <br/>
+A modern note-taking application where users can sign up, log in, and manage their notebooks. Each notebook can hold multiple notes, making it easy to stay organized. <br/>  <br/>
 Live project: [https://noteo-f1bx.vercel.app](https://noteo-f1bx.vercel.app/) 
 
 ## Features  
