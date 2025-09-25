@@ -6,7 +6,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { Logout } from "./logout";
+import Logout from "./logout";
 import { ModeToggle } from "./mode-toggle";
 import { SidebarTrigger } from "./ui/sidebar";
 

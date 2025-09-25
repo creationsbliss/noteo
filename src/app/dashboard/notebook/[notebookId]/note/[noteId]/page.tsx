@@ -1,7 +1,7 @@
 import type { JSONContent } from "@tiptap/react";
 import { PageWrapper } from "@/components/page-wrapper";
 import RichTextEditor from "@/components/rich-text-editor";
-import { getNoteById } from "../../../../../server/notes";
+import { getNoteById } from "../../../../../../../server/notes";
 
 type Params = Promise<{
   noteId: string;

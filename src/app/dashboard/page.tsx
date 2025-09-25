@@ -1,7 +1,7 @@
 import { CreateNotebookButton } from "@/components/create-notebook-button";
 import NotebookCard from "@/components/notebook-card";
 import { PageWrapper } from "@/components/page-wrapper";
-import { getNotebooks } from "@/server/notebooks";
+import { getNotebooks } from "../../../server/notebooks";
 
 export default async function Page() {
   const notebooks = await getNotebooks();
