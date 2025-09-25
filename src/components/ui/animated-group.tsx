@@ -1,21 +1,27 @@
-'use client';
-import { ReactNode } from 'react';
-import { motion, Variants } from 'motion/react';
-import React from 'react';
+"use client";
+import { motion, type Variants } from "framer-motion";
+import React, {
+  type ComponentPropsWithoutRef,
+  type ElementType,
+  type ReactNode,
+} from "react";
 
 export type PresetType =
-  | 'fade'
-  | 'slide'
-  | 'scale'
-  | 'blur'
-  | 'blur-slide'
-  | 'zoom'
-  | 'flip'
-  | 'bounce'
-  | 'rotate'
-  | 'swing';
+  | "fade"
+  | "slide"
+  | "scale"
+  | "blur"
+  | "blur-slide"
+  | "zoom"
+  | "flip"
+  | "bounce"
+  | "rotate"
+  | "swing";
 
-export type AnimatedGroupProps = {
+export type AnimatedGroupProps<
+  T extends ElementType = "div",
+  C extends ElementType = "div",
+> = {
   children: ReactNode;
   className?: string;
   variants?: {
@@ -23,9 +29,10 @@ export type AnimatedGroupProps = {
     item?: Variants;
   };
   preset?: PresetType;
-  as?: React.ElementType;
-  asChild?: React.ElementType;
-};
+  as?: T;
+  asChild?: C;
+} & ComponentPropsWithoutRef<T> &
+  ComponentPropsWithoutRef<C>;
 
 const defaultContainerVariants: Variants = {
   visible: {
@@ -41,95 +48,102 @@ const defaultItemVariants: Variants = {
 };
 
 const presetVariants: Record<PresetType, Variants> = {
-  fade: {},
+  fade: {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  },
   slide: {
-    hidden: { y: 20 },
-    visible: { y: 0 },
+    hidden: { y: 20, opacity: 0 },
+    visible: { y: 0, opacity: 1 },
   },
   scale: {
-    hidden: { scale: 0.8 },
-    visible: { scale: 1 },
+    hidden: { scale: 0.8, opacity: 0 },
+    visible: { scale: 1, opacity: 1 },
   },
   blur: {
-    hidden: { filter: 'blur(4px)' },
-    visible: { filter: 'blur(0px)' },
+    hidden: { filter: "blur(4px)", opacity: 0 },
+    visible: { filter: "blur(0px)", opacity: 1 },
   },
-  'blur-slide': {
-    hidden: { filter: 'blur(4px)', y: 20 },
-    visible: { filter: 'blur(0px)', y: 0 },
+  "blur-slide": {
+    hidden: { filter: "blur(4px)", y: 20, opacity: 0 },
+    visible: { filter: "blur(0px)", y: 0, opacity: 1 },
   },
   zoom: {
-    hidden: { scale: 0.5 },
+    hidden: { scale: 0.5, opacity: 0 },
     visible: {
       scale: 1,
-      transition: { type: 'spring', stiffness: 300, damping: 20 },
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 20 },
     },
   },
   flip: {
-    hidden: { rotateX: -90 },
+    hidden: { rotateX: -90, opacity: 0 },
     visible: {
       rotateX: 0,
-      transition: { type: 'spring', stiffness: 300, damping: 20 },
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 20 },
     },
   },
   bounce: {
-    hidden: { y: -50 },
+    hidden: { y: -50, opacity: 0 },
     visible: {
       y: 0,
-      transition: { type: 'spring', stiffness: 400, damping: 10 },
+      opacity: 1,
+      transition: { type: "spring", stiffness: 400, damping: 10 },
     },
   },
   rotate: {
-    hidden: { rotate: -180 },
+    hidden: { rotate: -180, opacity: 0 },
     visible: {
       rotate: 0,
-      transition: { type: 'spring', stiffness: 200, damping: 15 },
+      opacity: 1,
+      transition: { type: "spring", stiffness: 200, damping: 15 },
     },
   },
   swing: {
-    hidden: { rotate: -10 },
+    hidden: { rotate: -10, opacity: 0 },
     visible: {
       rotate: 0,
-      transition: { type: 'spring', stiffness: 300, damping: 8 },
+      opacity: 1,
+      transition: { type: "spring", stiffness: 300, damping: 8 },
     },
   },
 };
 
-const addDefaultVariants = (variants: Variants) => ({
-  hidden: { ...defaultItemVariants.hidden, ...variants.hidden },
-  visible: { ...defaultItemVariants.visible, ...variants.visible },
+const addDefaultVariants = (variants?: Variants): Variants => ({
+  hidden: { ...defaultItemVariants.hidden, ...(variants?.hidden || {}) },
+  visible: { ...defaultItemVariants.visible, ...(variants?.visible || {}) },
 });
 
-function AnimatedGroup({
+function AnimatedGroup<
+  T extends ElementType = "div",
+  C extends ElementType = "div",
+>({
   children,
   className,
   variants,
   preset,
-  as = 'div',
-  asChild = 'div',
-}: AnimatedGroupProps) {
-  const selectedVariants = {
-    item: addDefaultVariants(preset ? presetVariants[preset] : {}),
-    container: addDefaultVariants(defaultContainerVariants),
-  };
-  const containerVariants = variants?.container || selectedVariants.container;
-  const itemVariants = variants?.item || selectedVariants.item;
+  as,
+  asChild,
+  ...rest
+}: AnimatedGroupProps<T, C>) {
+  const As: ElementType = as || "div";
+  const AsChild: ElementType = asChild || "div";
 
-  const MotionComponent = React.useMemo(
-    () => motion.create(as as keyof JSX.IntrinsicElements),
-    [as]
-  );
-  const MotionChild = React.useMemo(
-    () => motion.create(asChild as keyof JSX.IntrinsicElements),
-    [asChild]
-  );
+  const containerVariants = variants?.container || defaultContainerVariants;
+  const itemVariants =
+    variants?.item || addDefaultVariants(preset ? presetVariants[preset] : {});
+
+  const MotionComponent = motion(As);
+  const MotionChild = motion(AsChild);
 
   return (
     <MotionComponent
-      initial='hidden'
-      animate='visible'
+      initial="hidden"
+      animate="visible"
       variants={containerVariants}
       className={className}
+      {...rest}
     >
       {React.Children.map(children, (child, index) => (
         <MotionChild key={index} variants={itemVariants}>
