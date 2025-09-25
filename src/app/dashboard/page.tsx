@@ -8,7 +8,7 @@ export default async function Page() {
 
   return (
     <PageWrapper breadcrumbs={[{ label: "Dashboard", href: "/dashboard" }]}>
-      <h1>Notebooks</h1>
+      <h1 className="font-semibold text-xl">Notebooks</h1>
 
       <CreateNotebookButton />
 

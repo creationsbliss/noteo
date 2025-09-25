@@ -42,9 +42,9 @@ export function SidebarData({ data }: SidebarDataProps) {
 
   return (
     <>
-      {filteredData.map((item) => (
+      {filteredData.map((item, index) => (
         <Collapsible
-          key={item.title}
+          key={index}
           title={item.title}
           defaultOpen
           className="group/collapsible"
@@ -64,8 +64,8 @@ export function SidebarData({ data }: SidebarDataProps) {
             <CollapsibleContent>
               <SidebarGroupContent>
                 <SidebarMenu>
-                  {item.items.map((item) => (
-                    <SidebarMenuItem key={item.title}>
+                  {item.items.map((item, index) => (
+                    <SidebarMenuItem key={index}>
                       <SidebarMenuButton asChild>
                         <a href={item.url}>
                           <File />

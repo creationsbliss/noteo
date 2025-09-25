@@ -54,7 +54,7 @@ export default function NotebookCard({ notebook }: NotebookCardProps) {
     }
   };
   return (
-    <Card>
+    <Card className="mt-8">
       <CardHeader>
         <CardTitle>{notebook.name}</CardTitle>
       </CardHeader>
@@ -63,7 +63,7 @@ export default function NotebookCard({ notebook }: NotebookCardProps) {
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
         <Link href={`/dashboard/notebook/${notebook.id}`}>
-          <Button variant="outline">Open Note</Button>
+          <Button variant="outline">Open NoteBook</Button>
         </Link>
 
         <AlertDialog open={isOpen} onOpenChange={setIsOpen}>
