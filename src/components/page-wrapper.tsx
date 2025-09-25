@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Fragment } from "react";
 import {
   Breadcrumb,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Logout from "./logout";
 import { ModeToggle } from "./mode-toggle";
+import { Button } from "./ui/button";
 import { SidebarTrigger } from "./ui/sidebar";
 
 interface PageWrapperProps {
@@ -44,8 +46,14 @@ export function PageWrapper({ children, breadcrumbs }: PageWrapperProps) {
             </Breadcrumb>
           </div>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3">
             <ModeToggle />
+            <Button variant="outline" type="button" asChild>
+              <Link href={"/"}>Home</Link>
+            </Button>
+            <Button variant="outline" type="button" asChild>
+              <Link href={"/dashboard"}>Notebook</Link>
+            </Button>
             <Logout />
           </div>
         </div>
